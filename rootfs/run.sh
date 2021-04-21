@@ -1,4 +1,4 @@
-#!/bin.sh
+#!/bin/sh
 
 echo "Check for GroupId ${GID}"
 grep "nextcloud" /etc/group 1>/dev/null 2>&1
