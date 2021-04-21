@@ -1,28 +1,28 @@
-#!/bin/sh
+#!/bin.sh
 
-echo "Updating permissions..."
-for dir in /var/www/html /var/log /et/apache2 /tmp ; do
-  if $(find $dir ! -user $UID -o ! -group $GID|egrep '.' -q); then
-    echo "Updating permissions in $dir..."
-    chown -R $UID:$GID $dir
-  else
-    echo "Permissions in $dir are correct."
-  fi
-done
-echo "Done updating permissions."
-
-echo "Check for UserId ${UID}"
-grep ":${UID}:" /etc/passwd 1>/dev/null 2>&1
+echo "Check for GroupId ${GID}"
+grep "nextcloud" /etc/group 1>/dev/null 2>&1
 ERRORCODE=$?
-
 if [ $ERRORCODE -ne 0 ]; then
-   echo "Creating user nextcloud with UID=${UID} and GID=${GID}"
-   /usr/sbin/adduser -g ${GID} -u ${UID} --disabled-password  --gecos "" nextcloud
+   echo "Creating group nextcloud with GID=${GID}"
+   groupadd -g ${GID} -o nextcloud
 else
-   echo "An existing user with UID=${UID} was found, nothing to do"
+   echo "Update group nextcloud with GID=${GID}"
+   groupmod -g ${GID} -o nextcloud
 fi
 
-echo "Run Nextcloud"
-/entrypoint.sh
+echo "Check for UserId ${UID}"
+grep "nextcloud" /etc/passwd 1>/dev/null 2>&1
+ERRORCODE=$?
+if [ $ERRORCODE -ne 0 ]; then
+   echo "Creating user nextcloud with UID=${UID} and GID=${GID}"
+   useradd -g ${GID} -u ${UID} -o nextcloud
+else
+   echo "Update user nextcloud with UID=${UID}"
+   usermod -u ${UID} -o nextcloud
+fi
+
+echo "Updating permissions..."
+chown -R nextcloud:nextcloud /var/www/*
 
 exit 0
