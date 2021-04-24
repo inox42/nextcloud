@@ -1,28 +1,22 @@
 #!/bin/sh
 
-echo "Check for GroupId ${GID}"
-grep "nextcloud" /etc/group 1>/dev/null 2>&1
-ERRORCODE=$?
-if [ $ERRORCODE -ne 0 ]; then
-   echo "Creating group nextcloud with GID=${GID}"
-   groupadd -g ${GID} -o nextcloud
+echo "Check www-data UserId ${UID}"
+if [ $(id -u www-data) -ne ${UID} ]; then
+   echo "Change www-data UID to ${UID}"
+   usermod -u ${UID} -o www-data
 else
-   echo "Update group nextcloud with GID=${GID}"
-   groupmod -g ${GID} -o nextcloud
+   echo "www-data UID is up-to-date"
 fi
 
-echo "Check for UserId ${UID}"
-grep "nextcloud" /etc/passwd 1>/dev/null 2>&1
-ERRORCODE=$?
-if [ $ERRORCODE -ne 0 ]; then
-   echo "Creating user nextcloud with UID=${UID} and GID=${GID}"
-   useradd -g ${GID} -u ${UID} -o nextcloud
+echo "Check www-data GroupId ${GID}"
+if [ $(id -g www-data) -ne ${GID} ]; then
+   echo "Change www-data GID to ${GID}"
+   groupmod -g ${GID} -o www-data
 else
-   echo "Update user nextcloud with UID=${UID}"
-   usermod -u ${UID} -o nextcloud
-fi
+   echo "www-data GID is up-to-date"
+fi 
 
 echo "Updating permissions..."
-chown -R nextcloud:nextcloud /var/www/*
+chown -R www-data:www-data /var/www/*
 
 exit 0
