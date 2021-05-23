@@ -1,4 +1,4 @@
-FROM nextcloud:21.0.1
+FROM nextcloud:21.0.2
 MAINTAINER inox42
 
 # Define default ID
