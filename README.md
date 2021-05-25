@@ -11,9 +11,10 @@ Site: https://hub.docker.com/_/nextcloud
 ### Feature
 - Offical
 - User mappings (edit GID and UID)
+- Install php-imagemagick
 That's all!
 
 ### Environment variables
 - **UID** : Nextcloud user id *(default : 1000)*
 - **GID** : Nextcloud group id *(default : 1000)*
-- **All Nextcloud official docker**
+- **All environment variables of Nextcloud official docker**
