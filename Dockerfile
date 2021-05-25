@@ -10,7 +10,7 @@ RUN chmod 555 /run.sh
 
 # Edit entrypoint
 RUN cp /entrypoint.sh /entrypoint.sh.old 
-RUN sed '118i\/run.sh' /entrypoint.sh.old > /entrypoint.sh
+RUN sed '45i\/run.sh' /entrypoint.sh.old > /entrypoint.sh
 RUN chmod 555 /entrypoint.sh
 
 #Install php-imagemagick
