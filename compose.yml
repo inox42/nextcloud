@@ -1,0 +1,38 @@
+version: '2'
+services:
+
+  # mariadb for nextloud
+  mariadb:
+    image: ghcr.io/linuxserver/mariadb:alpine-10.5.12-r0
+    container_name: mariadb
+    environment:
+      PUID: '1000'
+      PGID: '1000'
+      MYSQL_ROOT_PASSWORD: 'yV_4wmZECf-zoGz7FSQED'
+      TZ: 'Europe/Paris'
+      MYSQL_DATABASE: 'nextcloud'
+      MYSQL_USER: 'nextcloud'
+      MYSQL_PASSWORD: 'changethepass'
+    volumes:
+      - .docker/mariadb/db:/var/lib/mysql:rw
+      - .docker/mariadb/config:/config:rw
+    restart: unless-stopped
+    
+  # nextcloud service
+  nextcloud:
+    image: inox42/nextcloud
+    container_name: nextcloud
+    links:
+      - mariadb
+    environment:
+      MYSQL_DATABASE: "nextcloud"
+      MYSQL_USER: "nextcloud"
+      MYSQL_PASSWORD: "changethepass"
+      MYSQL_HOST: "mariadb"
+      UID: "1003"
+      GID: "1000"
+    volumes:
+      - ./docker/nextcloud:/var/www/html
+    ports:
+      - 8081:80
+    restart: unless-stopped
