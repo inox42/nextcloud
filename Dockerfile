@@ -1,5 +1,4 @@
-FROM nextcloud:22.1.1
-MAINTAINER inox42
+FROM nextcloud:22.2.0
 
 # Define default ID
 ENV UID=33 GID=33
